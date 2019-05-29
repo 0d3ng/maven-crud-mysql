@@ -119,7 +119,6 @@ public class MahasiswaImpl implements MahasiswaDao {
             prepareStatement.setString(1, nim);
             executeQuery = prepareStatement.executeQuery();
             if (executeQuery.next()) {
-                System.out.println(""+SELECT_BY_NIM);
                 m = new Mahasiswa(executeQuery.getNString("nim"), executeQuery.getString("nama"), executeQuery.getFloat("ipk"), executeQuery.getString("jurusan"));
             }
         } catch (SQLException ex) {

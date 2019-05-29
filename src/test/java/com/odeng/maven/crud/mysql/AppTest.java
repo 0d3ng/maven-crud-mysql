@@ -13,6 +13,7 @@ package com.odeng.maven.crud.mysql;
 import com.odeng.maven.crud.mysql.entitas.Mahasiswa;
 import com.odeng.maven.crud.mysql.service.MahasiswaService;
 import com.odeng.maven.crud.mysql.service.MahasiswaServiceImpl;
+import com.odeng.maven.crud.mysql.util.JdbcUtils;
 import org.junit.After;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -29,7 +30,7 @@ public class AppTest {
 
     @Before
     public void setUp() {
-        ms = new MahasiswaServiceImpl();
+        ms = new MahasiswaServiceImpl(JdbcUtils.getMahasiswaDao());
     }
 
     @After

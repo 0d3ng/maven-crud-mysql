@@ -12,7 +12,6 @@ package com.odeng.maven.crud.mysql.service;
 
 import com.odeng.maven.crud.mysql.dao.MahasiswaDao;
 import com.odeng.maven.crud.mysql.entitas.Mahasiswa;
-import com.odeng.maven.crud.mysql.util.JdbcUtils;
 import java.util.List;
 
 /**
@@ -23,8 +22,8 @@ public class MahasiswaServiceImpl implements MahasiswaService {
 
     private final MahasiswaDao mahasiswaDao;
 
-    public MahasiswaServiceImpl() {
-        mahasiswaDao = JdbcUtils.getMahasiswaDao();
+    public MahasiswaServiceImpl(MahasiswaDao mahasiswaDao) {
+        this.mahasiswaDao = mahasiswaDao;
     }
 
     @Override
