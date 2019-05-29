@@ -20,6 +20,7 @@ public class Mahasiswa {
     private String nama;
     private float ipk;
     private String jurusan;
+    private Alamat alamat;
 
     public Mahasiswa(String nim, String nama, float ipk, String jurusan) {
         this.nim = nim;
@@ -60,9 +61,17 @@ public class Mahasiswa {
         this.jurusan = jurusan;
     }
 
+    public Alamat getAlamat() {
+        return alamat;
+    }
+
+    public void setAlamat(Alamat alamat) {
+        this.alamat = alamat;
+    }
+
     @Override
     public String toString() {
-        return "Mahasiswa{" + "nim=" + nim + ", nama=" + nama + ", ipk=" + ipk + ", jurusan=" + jurusan + '}';
+        return "Mahasiswa{" + "nim=" + nim + ", nama=" + nama + ", ipk=" + ipk + ", jurusan=" + jurusan + ", alamat=" + alamat + '}';
     }
     
     

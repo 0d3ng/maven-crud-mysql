@@ -31,7 +31,9 @@ public class MahasiswaImpl implements MahasiswaDao {
 
     private final String INSERT = "INSERT INTO mahasiswa (nim, nama, ipk, jurusan) "
             + "	VALUES (?,?,?,?)";
+    private final String INSERT_ALAMAT = "INSERT INTO alamat(nim,nama_jalan,rt,rw,kode_desa,kode_kec,kode_kab,kode_prop) VALUES(?,?,?,?,?,?,?,?)";
     private final String UPDATE = "UPDATE mahasiswa SET nama=?, ipk=?, jurusan=? WHERE nim=?";
+    private final String UPDATE_ALAMAT = "UPDATE alamat SET nama_jalan=?, rt=?, rw=?,kode_desa=?,kode_kec=?,kode_kab=?,kode_prop=? WHERE nim=?";
     private final String DELETE = "DELETE FROM mahasiswa WHERE nim=?";
     private final String SELECT_ALL = "SELECT nim,nama,ipk,jurusan FROM mahasiswa";
     private final String SELECT_BY_NIM = "SELECT nim,nama,ipk,jurusan FROM mahasiswa WHERE nim=?";
@@ -42,23 +44,49 @@ public class MahasiswaImpl implements MahasiswaDao {
 
     @Override
     public boolean insert(Mahasiswa m) {
-        PreparedStatement prepareStatement = null;
+        PreparedStatement prepareStatementMhs = null;
+        PreparedStatement prepareStatementAlamat = null;
         try {
-            prepareStatement = connection.prepareStatement(INSERT);
-            prepareStatement.setString(1, m.getNim());
-            prepareStatement.setString(2, m.getNama());
-            prepareStatement.setFloat(3, m.getIpk());
-            prepareStatement.setString(4, m.getJurusan());
-            return prepareStatement.executeUpdate() > 0;
+            connection.setAutoCommit(false);
+            prepareStatementMhs = connection.prepareStatement(INSERT);
+            prepareStatementMhs.setString(1, m.getNim());
+            prepareStatementMhs.setString(2, m.getNama());
+            prepareStatementMhs.setFloat(3, m.getIpk());
+            prepareStatementMhs.setString(4, m.getJurusan());
+            boolean isInserted = prepareStatementMhs.executeUpdate() > 0;
+
+            prepareStatementAlamat = connection.prepareStatement(INSERT_ALAMAT);
+            prepareStatementAlamat.setString(1, m.getNim());
+            prepareStatementAlamat.setString(2, m.getAlamat().getNama_jalan());
+            prepareStatementAlamat.setString(3, m.getAlamat().getRT());
+            prepareStatementAlamat.setString(4, m.getAlamat().getRW());
+            prepareStatementAlamat.setString(5, m.getAlamat().getKode_desa());
+            prepareStatementAlamat.setString(6, m.getAlamat().getKode_kec());
+            prepareStatementAlamat.setString(7, m.getAlamat().getKode_kab());
+            prepareStatementAlamat.setString(8, m.getAlamat().getKode_prop());
+            boolean isInsertedAlamat = prepareStatementAlamat.executeUpdate() > 0;
+            if (isInserted && isInsertedAlamat) {
+                connection.commit();
+                return true;
+            }
         } catch (SQLException ex) {
             Logger.getLogger(MahasiswaImpl.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(MahasiswaImpl.class.getName()).log(Level.SEVERE, null, ex1);
+            }
         } finally {
-            if (prepareStatement != null) {
-                try {
-                    prepareStatement.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(MahasiswaImpl.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                connection.setAutoCommit(true);
+                if (prepareStatementMhs != null) {
+                    prepareStatementMhs.close();
                 }
+                if (prepareStatementAlamat != null) {
+                    prepareStatementAlamat.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(MahasiswaImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return false;
@@ -66,23 +94,49 @@ public class MahasiswaImpl implements MahasiswaDao {
 
     @Override
     public boolean update(Mahasiswa m) {
-        PreparedStatement prepareStatement = null;
+        PreparedStatement prepareStatementMhs = null;
+        PreparedStatement prepareStatementAlmt = null;
         try {
-            prepareStatement = connection.prepareStatement(UPDATE);
-            prepareStatement.setString(1, m.getNama());
-            prepareStatement.setFloat(2, m.getIpk());
-            prepareStatement.setString(3, m.getJurusan());
-            prepareStatement.setString(4, m.getNim());
-            return prepareStatement.executeUpdate() > 0;
+            connection.setAutoCommit(false);
+            prepareStatementMhs = connection.prepareStatement(UPDATE);
+            prepareStatementMhs.setString(1, m.getNama());
+            prepareStatementMhs.setFloat(2, m.getIpk());
+            prepareStatementMhs.setString(3, m.getJurusan());
+            prepareStatementMhs.setString(4, m.getNim());
+            boolean updatedMhs = prepareStatementMhs.executeUpdate() > 0;
+
+            prepareStatementAlmt = connection.prepareStatement(UPDATE_ALAMAT);
+            prepareStatementAlmt.setString(1, m.getAlamat().getNama_jalan());
+            prepareStatementAlmt.setString(2, m.getAlamat().getRT());
+            prepareStatementAlmt.setString(3, m.getAlamat().getRW());
+            prepareStatementAlmt.setString(4, m.getAlamat().getKode_desa());
+            prepareStatementAlmt.setString(5, m.getAlamat().getKode_kec());
+            prepareStatementAlmt.setString(6, m.getAlamat().getKode_kab());
+            prepareStatementAlmt.setString(7, m.getAlamat().getKode_prop());
+            prepareStatementAlmt.setString(8, m.getNim());
+            boolean updatedAlmt = prepareStatementMhs.executeUpdate() > 0;
+            if (updatedMhs && updatedAlmt) {
+                connection.commit();
+                return true;
+            }
         } catch (SQLException ex) {
             Logger.getLogger(MahasiswaImpl.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(MahasiswaImpl.class.getName()).log(Level.SEVERE, null, ex1);
+            }
         } finally {
-            if (prepareStatement != null) {
-                try {
-                    prepareStatement.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(MahasiswaImpl.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                connection.setAutoCommit(true);
+                if (prepareStatementMhs != null) {
+                    prepareStatementMhs.close();
                 }
+                if (prepareStatementAlmt != null) {
+                    prepareStatementAlmt.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(MahasiswaImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return false;

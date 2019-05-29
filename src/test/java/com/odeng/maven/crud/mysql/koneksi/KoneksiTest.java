@@ -21,15 +21,15 @@ import static org.junit.Assert.*;
  * @author od3ng
  */
 public class KoneksiTest {
-    
+
     public KoneksiTest() {
     }
-    
+
     @Before
     public void setUp() {
         System.out.println("Before...");
     }
-    
+
     @After
     public void tearDown() {
         System.out.println("After...");
@@ -44,5 +44,5 @@ public class KoneksiTest {
         Connection result = Koneksi.getConnection();
         assertNotNull("Success", result);
     }
-    
+
 }

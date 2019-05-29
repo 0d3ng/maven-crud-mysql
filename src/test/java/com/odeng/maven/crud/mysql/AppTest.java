@@ -10,6 +10,7 @@
  */
 package com.odeng.maven.crud.mysql;
 
+import com.odeng.maven.crud.mysql.entitas.Alamat;
 import com.odeng.maven.crud.mysql.entitas.Mahasiswa;
 import com.odeng.maven.crud.mysql.service.MahasiswaService;
 import com.odeng.maven.crud.mysql.service.MahasiswaServiceImpl;
@@ -37,20 +38,23 @@ public class AppTest {
     public void tearDown() {
     }
 
-    @Ignore
     @Test
     public void testInsert() {
+        Alamat a = new Alamat("Jln. Prenjak no.99", "02", "04", "01", "01", "01", "01");
         Mahasiswa m = new Mahasiswa("075410200", "Singgih Kuncoro", 2.75F, "Teknik Mesin");
+        m.setAlamat(a);
         assertTrue(ms.insert(m));
     }
 
-    @Ignore
     @Test
     public void testUpdate() {
+        Alamat a = new Alamat("Jln. Semut no.99", "02", "04", "01", "01", "01", "01");
         Mahasiswa m = new Mahasiswa("075410200", "Singgih Kuncoro Aji", 2.80F, "Teknik Mesin");
+        m.setAlamat(a);
         assertTrue(ms.update(m));
     }
 
+    @Ignore
     @Test
     public void testGetMahasiswaByNim() {
         assertTrue(ms.getMahasiswaByNim("075410099") != null);
