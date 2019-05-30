@@ -68,6 +68,8 @@ public class MahasiswaImpl implements MahasiswaDao {
             if (isInserted && isInsertedAlamat) {
                 connection.commit();
                 return true;
+            }else {
+                connection.rollback();
             }
         } catch (SQLException ex) {
             Logger.getLogger(MahasiswaImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -118,6 +120,8 @@ public class MahasiswaImpl implements MahasiswaDao {
             if (updatedMhs && updatedAlmt) {
                 connection.commit();
                 return true;
+            } else {
+                connection.rollback();
             }
         } catch (SQLException ex) {
             Logger.getLogger(MahasiswaImpl.class.getName()).log(Level.SEVERE, null, ex);
